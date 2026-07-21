@@ -151,6 +151,16 @@ npx skills remove i-have-adhd -g
 
 Manual fallback: `rm -rf ~/.cursor/skills/i-have-adhd` or `.cursor/skills/i-have-adhd`.
 
+## How activation works
+
+Three states, in order of how much you opt in:
+
+1. **Installed, not invoked.** Nothing happens. `SKILL.md` sets `disable-model-invocation: true`, so the model never sees the skill's description and never applies the rules on its own.
+2. **You type `/i-have-adhd`.** Rules on for that session. Say "stop adhd mode" or "normal mode" to turn them off.
+3. **You add the always-on config below.** Rules on from message one, every session, no command needed.
+
+There is no automatic middle ground. If you did not turn it on, it is off.
+
 ## Always-on (optional)
 
 ### Claude Code
@@ -166,6 +176,18 @@ Always follow the rules in the `i-have-adhd` skill: action-first, numbered steps
 ### Cursor
 
 Add the same text to **Cursor Settings → Rules → User Rules** (applies across projects), or put it in a project rule under `.cursor/rules/` with `alwaysApply: true`.
+
+## On-demand only (default)
+
+This is the shipped behaviour. No configuration needed. `skills/i-have-adhd/SKILL.md` carries:
+
+```yaml
+disable-model-invocation: true
+```
+
+Claude never auto-applies the rules. `/i-have-adhd` (or "adhd mode") turns them on for the session; "stop adhd
+mode" / "normal mode" turns them off. Restart Claude Code after editing the skill. The ten rules themselves are
+unchanged. This only governs *when* they engage.
 
 ## Troubleshooting
 
