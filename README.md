@@ -39,7 +39,7 @@ Install instructions for other coding agents live in [INSTALL.md](./INSTALL.md).
 
 ## What it does
 
-A skill for Claude Code, Codex, and Cursor that stops burying the answer. Action first. Steps numbered. No "Hope this helps!"
+A skill for your coding assistant that stops it from burying the answer. Action first. Steps numbered. No "Hope this helps!"
 
 
 ## What changes
