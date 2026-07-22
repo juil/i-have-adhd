@@ -311,6 +311,54 @@ Exceptions: explain fully when asked to explain. Confirm before destructive acti
 </details>
 
 <details>
+<summary><strong>Gemini CLI</strong></summary>
+
+Gemini CLI has no plugin marketplace, so there are two native routes: a **custom command** (opt-in, off until you invoke it) or an **extension** (always-on once installed). The command route matches this skill's default posture; pick it unless you want the rules on every session.
+
+### Install (command, opt-in)
+
+```bash
+mkdir -p ~/.gemini/commands
+curl -fsSL https://raw.githubusercontent.com/ayghri/i-have-adhd/main/skills/i-have-adhd/agents/gemini.toml \
+  -o ~/.gemini/commands/i-have-adhd.toml
+```
+
+Start a new session, type `/i-have-adhd`. It stays on for that session.
+
+### Install (extension, always-on)
+
+```bash
+gemini extensions install https://github.com/ayghri/i-have-adhd
+```
+
+The extension loads `GEMINI.md`, which imports the full skill, so the rules apply from message one. `git` must be installed.
+
+### Verify
+
+```bash
+gemini extensions list          # extension route
+ls ~/.gemini/commands           # command route: i-have-adhd.toml present
+```
+
+Or type `/` in a session and confirm `i-have-adhd` is listed.
+
+### Update
+
+```bash
+gemini extensions update i-have-adhd    # extension route
+# command route: re-run the curl above
+```
+
+### Uninstall
+
+```bash
+gemini extensions uninstall i-have-adhd    # extension route
+rm ~/.gemini/commands/i-have-adhd.toml     # command route
+```
+
+</details>
+
+<details>
 <summary><strong>Antigravity (<code>agy</code>)</strong></summary>
 
 ### Install
