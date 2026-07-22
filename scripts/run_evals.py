@@ -177,6 +177,9 @@ def run_evaluations(args: argparse.Namespace) -> int:
     errors = validate_cases(cases)
     if errors:
         raise ValueError("\n".join(errors))
+    unknown = sorted(set(args.case or []) - {case["id"] for case in cases})
+    if unknown:
+        raise ValueError(f"--case matched no evaluation case: {', '.join(unknown)}")
     config = json.loads(args.runner_config.read_text(encoding="utf-8"))
     runner = config[args.runner]
     command = list(runner["command"])
