@@ -37,19 +37,6 @@ Then type `$i-have-adhd` to apply the output style explicitly. The skill can als
 
 </details>
 
-<details>
-<summary><strong>Zed</strong></summary>
-
-Zed's Agent reads Agent Skills natively. In the Agent Panel, open the Skills manager and choose **Create skill from URL**, then paste:
-
-```
-https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md
-```
-
-Then type `/i-have-adhd` in the Agent Panel. Off until you invoke it.
-
-</details>
-
 Install instructions for other coding agents live in [INSTALL.md](./INSTALL.md).
 
 ## What it does

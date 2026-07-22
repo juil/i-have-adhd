@@ -1,6 +1,6 @@
 # Install i-have-adhd
 
-One skill. Claude Code, Codex, Zed, Antigravity, and any harness that reads agent skills.
+One skill. Claude Code, Codex, Antigravity, and any harness that reads agent skills.
 
 <details>
 <summary><strong>Claude Code</strong></summary>
@@ -114,11 +114,11 @@ Exceptions: explain fully when asked to explain. Confirm before destructive acti
 <details>
 <summary><strong>Zed</strong></summary>
 
-Zed's Agent reads Agent Skills natively — the same `SKILL.md`, no conversion. (Zed's older "Rules" were replaced by Skills + `AGENTS.md` instructions.)
+Zed's Agent reads Agent Skills natively: the same `SKILL.md`, no conversion. (Zed's older "Rules" were replaced by Skills plus `AGENTS.md` instructions.)
 
 ### Install
 
-In the Agent Panel, open the Skills manager and choose **Create skill from URL** (also available from the command palette as `agent: create skill from url`), then paste:
+In the Agent Panel, open the Skills manager and choose **Create skill from URL** (also in the command palette as `agent: create skill from url`), then paste:
 
 ```
 https://github.com/ayghri/i-have-adhd/blob/main/skills/i-have-adhd/SKILL.md
@@ -135,7 +135,7 @@ cp -R i-have-adhd/skills/i-have-adhd ~/.config/zed/skills/
 
 ### Verify
 
-Open the Skills manager in the Agent Panel — `i-have-adhd` is listed. Or type `/` and confirm it appears.
+Open the Skills manager in the Agent Panel and confirm `i-have-adhd` is listed. Or type `/` and confirm it appears.
 
 ### Update
 
@@ -152,7 +152,20 @@ Add to your personal `~/.config/zed/AGENTS.md`:
 ```markdown
 ## Output style
 
-Always follow the rules in the `i-have-adhd` skill: action-first, numbered steps, no preamble, no closers, state restated each turn.
+The reader has ADHD. Shape every response so it can be acted on:
+
+1. Lead with the answer or next action: command, path, or snippet first.
+2. Number multi-step work; one bounded action per step.
+3. End with one next action doable in under two minutes.
+4. Finish the current issue before raising a new one.
+5. Restate progress each turn ("step 3 of 5 done").
+6. Give time estimates in concrete units, never "a bit".
+7. After a change, show what now works.
+8. Errors: state location, cause, and fix. No drama.
+9. Cap lists at 5 items.
+10. No preamble, no recaps, no closers.
+
+Exceptions: explain fully when asked to explain. Confirm before destructive actions. After three failed fixes, stop and name the doubtful assumption. If the request is ambiguous, ask one short question.
 ```
 
 </details>
