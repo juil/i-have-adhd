@@ -485,12 +485,12 @@ Exceptions: explain fully when asked to explain. Confirm before destructive acti
 
 ## How activation works
 
-1. **Installed, not invoked.** Nothing happens. `SKILL.md` sets `disable-model-invocation: true`, so the model never sees the skill and never applies the rules on its own.
+1. **Installed, not invoked.** In Claude Code, nothing happens: `SKILL.md` sets `disable-model-invocation: true`, so the model never sees the skill and never applies the rules on its own. That flag is Claude Code's own; Codex ships with implicit invocation allowed (see the README), and harnesses that implement the open Agent Skills spec load every skill's description at startup and may activate the skill themselves.
 2. **You type `/i-have-adhd`.** Rules on for that session. "stop adhd mode" or "normal mode" turns them off.
 3. **You touch `~/.claude/.i-have-adhd-always`** (Claude Code). A `SessionStart` hook loads the full ruleset from message one, every session.
 4. **You add the always-on snippet above** (other harnesses). Keeps the core rules in your agent's persistent context.
 
-No middle ground. If you did not turn it on, it is off.
+In Claude Code, no middle ground: if you did not turn it on, it is off.
 
 ## Troubleshooting
 
