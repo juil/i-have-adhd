@@ -235,6 +235,82 @@ Exceptions: explain fully when asked to explain. Confirm before destructive acti
 </details>
 
 <details>
+<summary><strong>Pi</strong></summary>
+
+Pi implements the Agent Skills standard, so the same `SKILL.md` loads directly, no conversion. Pi's invocation differs from the others: skills are called as `/skill:<name>`.
+
+### Install
+
+```bash
+npx skills add ayghri/i-have-adhd -a pi -y
+```
+
+Prefer the filesystem? Pi discovers skills in `~/.pi/agent/skills/` and `~/.agents/skills/` (global), and `.pi/skills/` and `.agents/skills/` (project):
+
+```bash
+git clone https://github.com/ayghri/i-have-adhd
+mkdir -p ~/.pi/agent/skills
+cp -R i-have-adhd/skills/i-have-adhd ~/.pi/agent/skills/
+```
+
+Enable skill slash commands in Pi's `settings.json`:
+
+```json
+{ "enableSkillCommands": true }
+```
+
+Start a new session and type `/skill:i-have-adhd`.
+
+### Verify
+
+```bash
+npx skills list
+```
+
+Or type `/skill:` in a session and confirm `i-have-adhd` is listed.
+
+### Update
+
+```bash
+npx skills update i-have-adhd
+```
+
+Or re-copy the folder after `git pull`.
+
+### Uninstall
+
+```bash
+npx skills remove i-have-adhd
+```
+
+Or delete `~/.pi/agent/skills/i-have-adhd`.
+
+### Always-on (optional)
+
+Add to your project `AGENTS.md`:
+
+```markdown
+## Output style
+
+The reader has ADHD. Shape every response so it can be acted on:
+
+1. Lead with the answer or next action: command, path, or snippet first.
+2. Number multi-step work; one bounded action per step.
+3. End with one next action doable in under two minutes.
+4. Finish the current issue before raising a new one.
+5. Restate progress each turn ("step 3 of 5 done").
+6. Give time estimates in concrete units, never "a bit".
+7. After a change, show what now works.
+8. Errors: state location, cause, and fix. No drama.
+9. Cap lists at 5 items.
+10. No preamble, no recaps, no closers.
+
+Exceptions: explain fully when asked to explain. Confirm before destructive actions. After three failed fixes, stop and name the doubtful assumption. If the request is ambiguous, ask one short question.
+```
+
+</details>
+
+<details>
 <summary><strong>Antigravity (<code>agy</code>)</strong></summary>
 
 ### Install
@@ -290,7 +366,7 @@ Exceptions: explain fully when asked to explain. Confirm before destructive acti
 </details>
 
 <details>
-<summary><strong>Cursor, OpenCode, Amp, Pi, and any other agent-skills harness</strong></summary>
+<summary><strong>Cursor, OpenCode, Amp, and any other agent-skills harness</strong></summary>
 
 Works with any harness that reads agent skills. Swap `-a <agent>` for yours.
 
