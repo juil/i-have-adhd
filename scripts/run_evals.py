@@ -138,7 +138,7 @@ def _condition_prompt(task: str, condition: str, skill_path: Path | None) -> str
     if condition == "baseline":
         return task
     if skill_path is None:
-        raise ValueError(f"--{condition}-skill is required for {condition}")
+        raise ValueError(f"--condition-skill is required for the {condition} condition")
     instructions = skill_path.read_text(encoding="utf-8")
     return (
         "Follow the response-style skill below while completing the task. "
