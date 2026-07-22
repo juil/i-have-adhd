@@ -89,7 +89,16 @@ A skill for your coding assistant that stops it from burying the answer. Action 
 
 ## Tune it
 
-Fork, edit `skills/i-have-adhd/SKILL.md`, install your fork: `claude plugin marketplace add <your-username>/i-have-adhd`. Re-invoke `/i-have-adhd`.
+Fork, edit `skills/i-have-adhd/SKILL.md`, then swap your copy in:
+
+```bash
+claude plugin uninstall i-have-adhd            # drop the upstream copy first:
+claude plugin marketplace remove i-have-adhd   # fork and upstream share both names
+claude plugin marketplace add <your-username>/i-have-adhd
+claude plugin install i-have-adhd@i-have-adhd
+```
+
+Restart Claude Code, then re-invoke `/i-have-adhd`.
 
 ## Credits
 
