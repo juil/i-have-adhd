@@ -9,7 +9,7 @@ import shlex
 import subprocess
 import sys
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -94,6 +94,39 @@ def _validate_score(row: dict[str, Any], index: int) -> None:
         raise ValueError(f"Score row {index}: blocker must be boolean")
 
 
+def _describe_rows(keys: list[tuple[str, Any]]) -> str:
+    return ", ".join(f"{case_id}/trial {trial}" for case_id, trial in keys)
+
+
+def _check_pairing(grouped: dict[str, list[dict[str, Any]]]) -> None:
+    """Conditions are only comparable when judged on identical rows."""
+    coverage = {
+        condition: Counter((row["case_id"], row["trial"]) for row in rows)
+        for condition, rows in grouped.items()
+    }
+    for condition, counts in sorted(coverage.items()):
+        repeated = sorted(key for key, count in counts.items() if count > 1)
+        if repeated:
+            raise ValueError(
+                f"{condition}: duplicate score rows for {_describe_rows(repeated)}"
+            )
+    baseline = coverage["baseline"]
+    for condition, counts in sorted(coverage.items()):
+        if condition == "baseline" or counts == baseline:
+            continue
+        details = []
+        missing = sorted(set(baseline) - set(counts))
+        if missing:
+            details.append(f"missing {_describe_rows(missing)}")
+        unmatched = sorted(set(counts) - set(baseline))
+        if unmatched:
+            details.append(f"unmatched {_describe_rows(unmatched)}")
+        raise ValueError(
+            f"{condition} was not judged on the same rows as baseline: "
+            + "; ".join(details)
+        )
+
+
 def summarize_scores(scores: list[dict[str, Any]]) -> dict[str, Any]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for index, row in enumerate(scores, start=1):
@@ -101,6 +134,7 @@ def summarize_scores(scores: list[dict[str, Any]]) -> dict[str, Any]:
         grouped[row["condition"]].append(row)
     if "baseline" not in grouped or "candidate" not in grouped:
         raise ValueError("Scores must include baseline and candidate conditions")
+    _check_pairing(grouped)
 
     conditions: dict[str, dict[str, Any]] = {}
     for condition, rows in sorted(grouped.items()):

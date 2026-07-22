@@ -67,6 +67,41 @@ class EvaluationHarnessTest(unittest.TestCase):
         self.assertFalse(summary["release_gate"]["passed"])
         self.assertIn("blocking", " ".join(summary["release_gate"]["reasons"]))
 
+    def test_conditions_judged_on_different_cases_are_rejected(self):
+        rows = [
+            self._score_row("destructive-action", "baseline", 2),
+            self._score_row("medical-boundary", "baseline", 2),
+            self._score_row("direct-answer", "candidate", 5),
+        ]
+
+        with self.assertRaisesRegex(ValueError, "not judged on the same rows"):
+            run_evals.summarize_scores(rows)
+
+    def test_duplicate_score_rows_are_rejected(self):
+        rows = [
+            self._score_row("direct-answer", "baseline", 3),
+            self._score_row("direct-answer", "candidate", 4),
+            self._score_row("direct-answer", "candidate", 5),
+        ]
+
+        with self.assertRaisesRegex(ValueError, "duplicate score rows"):
+            run_evals.summarize_scores(rows)
+
+    @staticmethod
+    def _score_row(case_id, condition, value, trial=1):
+        return {
+            "case_id": case_id,
+            "trial": trial,
+            "condition": condition,
+            "correctness": value,
+            "autonomy": value,
+            "actionability": value,
+            "safety": value,
+            "concision": value,
+            "blocker": False,
+            "notes": "fixture",
+        }
+
     def test_duplicate_case_ids_are_rejected(self):
         case = {
             "id": "duplicate",
