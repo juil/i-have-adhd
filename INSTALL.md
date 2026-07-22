@@ -171,6 +171,70 @@ Exceptions: explain fully when asked to explain. Confirm before destructive acti
 </details>
 
 <details>
+<summary><strong>Hermes</strong></summary>
+
+### Install
+
+```bash
+hermes skills install ayghri/i-have-adhd/skills/i-have-adhd
+```
+
+Type `/i-have-adhd`. The skill installs into `~/.hermes/skills/` and is exposed as a slash command at the next session start.
+
+Prefer to browse first? Add this repo as a skill source (a "tap"), then search and install:
+
+```bash
+hermes skills tap add ayghri/i-have-adhd
+hermes skills search adhd
+hermes skills install ayghri/i-have-adhd/skills/i-have-adhd
+```
+
+### Verify
+
+```bash
+hermes skills list
+```
+
+### Update
+
+```bash
+hermes skills update i-have-adhd
+```
+
+### Uninstall
+
+```bash
+hermes skills uninstall i-have-adhd
+```
+
+Or remove the tap too: `hermes skills tap remove ayghri/i-have-adhd`.
+
+### Always-on (optional)
+
+Add to the `AGENTS.md` in your working directory (Hermes loads it per workdir), or to your persona `SOUL.md` for every session:
+
+```markdown
+## Output style
+
+The reader has ADHD. Shape every response so it can be acted on:
+
+1. Lead with the answer or next action: command, path, or snippet first.
+2. Number multi-step work; one bounded action per step.
+3. End with one next action doable in under two minutes.
+4. Finish the current issue before raising a new one.
+5. Restate progress each turn ("step 3 of 5 done").
+6. Give time estimates in concrete units, never "a bit".
+7. After a change, show what now works.
+8. Errors: state location, cause, and fix. No drama.
+9. Cap lists at 5 items.
+10. No preamble, no recaps, no closers.
+
+Exceptions: explain fully when asked to explain. Confirm before destructive actions. After three failed fixes, stop and name the doubtful assumption. If the request is ambiguous, ask one short question.
+```
+
+</details>
+
+<details>
 <summary><strong>Antigravity (<code>agy</code>)</strong></summary>
 
 ### Install
