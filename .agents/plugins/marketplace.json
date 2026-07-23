@@ -8,8 +8,8 @@
       "name": "i-have-adhd",
       "source": {
         "source": "url",
-        "url": "https://github.com/ayghri/i-have-adhd.git",
-        "ref": "main"
+        "url": "https://github.com/juil/i-have-adhd.git",
+        "ref": "v1.0.0"
       },
       "policy": {
         "installation": "AVAILABLE",
