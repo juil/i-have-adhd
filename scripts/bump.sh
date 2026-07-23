@@ -47,15 +47,30 @@ printf '%s\n' "$next" > VERSION
 python3 scripts/version_tool.py write "$next"
 
 # CHANGELOG: open a new section for this version, keeping provenance visible.
+# The entry goes directly above the newest existing "## " section, so it lands
+# under the file's title and preamble rather than on top of them.
 upstream_sha="$(git rev-parse --short=12 upstream/main 2>/dev/null || echo 'not-fetched')"
-tmp="$(mktemp)"
+entry="$(mktemp)"
 {
   printf '## v%s — %s\n\n' "$next" "$(date +%Y-%m-%d)"
   printf -- '- Upstream ref at time of release: `%s`\n' "$upstream_sha"
-  printf -- '- <describe what changed in SKILL.md, or "no content change">\n\n'
-  cat CHANGELOG.md
-} > "$tmp"
+  printf -- '- <describe what changed in SKILL.md, or "no content change">\n'
+} > "$entry"
+
+first_section="$(grep -n '^## ' CHANGELOG.md | head -n1 | cut -d: -f1 || true)"
+tmp="$(mktemp)"
+if [ -n "$first_section" ]; then
+  head -n "$((first_section - 1))" CHANGELOG.md > "$tmp"
+  cat "$entry" >> "$tmp"
+  printf '\n' >> "$tmp"
+  tail -n "+$first_section" CHANGELOG.md >> "$tmp"
+else
+  cat CHANGELOG.md > "$tmp"
+  printf '\n' >> "$tmp"
+  cat "$entry" >> "$tmp"
+fi
 mv "$tmp" CHANGELOG.md
+rm -f "$entry"
 
 echo
 echo "Edit the CHANGELOG entry, then:"
