@@ -1,0 +1,64 @@
+name: version guard
+
+# Two invariants, both aimed at the same failure: skill content reaching a
+# session without a deliberate decision to publish it.
+#
+#   1. Every declared version agrees with VERSION.
+#      A stale manifest means one harness installs a different build than
+#      the others, silently.
+#
+#   2. If SKILL.md changed since the last tag, VERSION changed too.
+#      Claude Code keys its install cache on the version string, so editing
+#      SKILL.md without bumping produces content that is published to some
+#      machines (fresh installs) and not others (existing installs) -- the
+#      exact drift this fork exists to prevent.
+
+on:
+  pull_request:
+    paths:
+      - VERSION
+      - skills/**
+      - .claude-plugin/**
+      - .codex-plugin/**
+      - .agents/**
+      - gemini-extension.json
+      - scripts/**
+      - .github/workflows/version-guard.yml
+  push:
+    branches: [main]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need tags + history to diff against the last release
+
+      - name: All declared versions agree with VERSION
+        run: python3 scripts/version_tool.py check
+
+      - name: SKILL.md did not change without a version bump
+        run: |
+          set -euo pipefail
+          last_tag="$(git tag --list 'v*' --sort=-v:refname | head -n1)"
+          if [ -z "$last_tag" ]; then
+            echo "No tags yet -- nothing to compare against. Skipping."
+            exit 0
+          fi
+          echo "Comparing against $last_tag"
+
+          if git diff --quiet "$last_tag" HEAD -- skills/i-have-adhd/SKILL.md; then
+            echo "SKILL.md unchanged since $last_tag. OK."
+            exit 0
+          fi
+
+          current="$(tr -d '[:space:]' < VERSION)"
+          tagged="${last_tag#v}"
+          if [ "$current" = "$tagged" ]; then
+            echo "::error::SKILL.md changed since $last_tag but VERSION is still $current."
+            echo "::error::Run scripts/bump.sh <major|minor|patch> so the change is published deliberately."
+            git --no-pager diff --stat "$last_tag" HEAD -- skills/i-have-adhd/SKILL.md
+            exit 1
+          fi
+          echo "SKILL.md changed and VERSION moved $tagged -> $current. OK."
